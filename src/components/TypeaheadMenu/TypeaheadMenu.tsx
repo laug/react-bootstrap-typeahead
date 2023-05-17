@@ -19,7 +19,7 @@ export interface TypeaheadMenuProps extends MenuProps {
   newSelectionPrefix?: ReactNode;
   options: Option[];
   paginationText?: ReactNode;
-  renderMenuItemChildren: RenderMenuItemChildren;
+  renderMenuItemChildren?: RenderMenuItemChildren;
   text: string;
 }
 
@@ -39,23 +39,24 @@ const propTypes = {
   renderMenuItemChildren: PropTypes.func,
 };
 
-const defaultProps = {
-  newSelectionPrefix: 'New selection: ',
-  paginationText: 'Display additional results...',
-  renderMenuItemChildren: (option: Option, props: TypeaheadMenuProps) => (
+function defaultRenderMenuItemChildren(
+  option: Option,
+  props: TypeaheadMenuProps
+) {
+  return (
     <Highlighter search={props.text}>
       {getOptionLabel(option, props.labelKey)}
     </Highlighter>
-  ),
-};
+  );
+}
 
 const TypeaheadMenu = (props: TypeaheadMenuProps) => {
   const {
     labelKey,
-    newSelectionPrefix,
+    newSelectionPrefix = 'New selection: ',
     options,
-    paginationText,
-    renderMenuItemChildren,
+    paginationText = 'Display additional results...',
+    renderMenuItemChildren = defaultRenderMenuItemChildren,
     text,
     ...menuProps
   } = props;
@@ -122,6 +123,5 @@ const TypeaheadMenu = (props: TypeaheadMenuProps) => {
 };
 
 TypeaheadMenu.propTypes = propTypes;
-TypeaheadMenu.defaultProps = defaultProps;
 
 export default TypeaheadMenu;
